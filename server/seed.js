@@ -6,51 +6,29 @@
 import { Pets } from './database.js';
 
 const pets = [
-  { name: 'Firulais', breed_names: 'Pitbull', birthday: '2019-01-01' },
-  { name: 'Rex', breed_names: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_names: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_names: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_names: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_names: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Droopy', breed_names: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Spike', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_names: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_names: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_names: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_names: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Droopy', breed_names: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Spike', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_names: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_names: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_names: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_names: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Droopy', breed_names: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Spike', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_names: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_names: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_names: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_names: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_names: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Droopy', breed_names: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Spike', breed_names: 'Pastor Aleman', birthday: '2019-01-01' },
+  { name: 'Firulais', breed_name: 'Pitbull', birthday: '2019-01-01' },
+  { name: 'Rex', breed_name: 'Bulldog', birthday: '2019-01-01' },
+  { name: 'Scooby', breed_name: 'Labrador', birthday: '2019-01-01' },
+  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
+  { name: 'Goofy', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
+  { name: 'Dino', breed_name: 'Chihuahua', birthday: '2019-01-01' },
+  { name: 'Odie', breed_name: 'Beagle', birthday: '2019-01-01' },
+  { name: 'Snoopy', breed_name: 'Pug', birthday: '2019-01-01' },
+  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
+  { name: 'Droopy', breed_name: 'Bulldog', birthday: '2019-01-01' },
+  { name: 'Spike', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
+  { name: 'Scooby', breed_name: 'Labrador', birthday: '2019-01-01' },
+  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
+  { name: 'Goofy', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
+  { name: 'Dino', breed_name: 'Chihuahua', birthday: '2019-01-01' },
+  { name: 'Odie', breed_name: 'Beagle', birthday: '2019-01-01' },
+  { name: 'Snoopy', breed_name: 'Pug', birthday: '2019-01-01' },
+  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
 ]
 
 await Pets.bulkCreate(pets);
-
 console.log('Pets created');
 
-// copilot create 30 users for my database, this is a development seed file
 
 import { User } from './database.js';
 
@@ -71,10 +49,6 @@ const users = [
   { name: 'Nancy White', email: 'nancy@example.com', birthday: '1982-09-14' },
   { name: 'Olivia Adams', email: 'olivia@example.com', birthday: '1997-03-04' },
   { name: 'Peter Taylor', email: 'peter@example.com', birthday: '1981-11-26' },
-  { name: 'Rachel Clark', email: 'rachel@example.com', birthday: '1998-05-31' },
-  { name: 'Samuel Hall', email: 'samuel@example.com', birthday: '1980-02-09' },
-  { name: 'Tina Garcia', email: 'tina@example.com', birthday: '1999-09-23' },
-  { name: 'Victor Lopez', email: 'victor@example.com', birthday: '1979-12-12' },
 ];
 
 await User.bulkCreate(users);

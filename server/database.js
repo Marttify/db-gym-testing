@@ -1,11 +1,11 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
 const sequelize = new Sequelize({
-  username: 'root',
+  username: 'postgres',
   password: 'password',
   database: 'dev_testing',
   host: 'localhost',
-  dialect: 'mariadb',
+  dialect: 'postgres',
   logQueryParameters: true
 });
 
@@ -17,6 +17,6 @@ export const User = sequelize.define('users', {
 
 export const Pets = sequelize.define('pets', {
   name: DataTypes.STRING,
-  breed_names: DataTypes.STRING,
+  breed_name: DataTypes.STRING,
   birthday: DataTypes.DATE,
 });
