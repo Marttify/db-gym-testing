@@ -6,10 +6,10 @@ Este proyecto es una API desarrollada con Node.js y Express que permite gestiona
 ---
 
 ## Requisitos previos
-- Node.js v14 o superior
-- PostgreSQL instalado
-- Postman para pruebas de API (opcional)
-- TablePlus o dbning para la gestión de la base de datos
+- **Node.js** v14 o superior
+- **PostgreSQL** instalado
+- **Postman** para pruebas de API (opcional)
+- **TablePlus** o **dbning** para la gestión de la base de datos
 
 ---
 
@@ -102,6 +102,123 @@ Este proyecto es una API desarrollada con Node.js y Express que permite gestiona
 
 ---
 
+## Crear las tablas en PostgreSQL
+
+Para crear las tablas en tu base de datos PostgreSQL, ejecuta las siguientes consultas en tu cliente de base de datos (como TablePlus o dbning):
+
+### Tabla Usuarios
+```sql
+CREATE TABLE Usuarios (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    contraseña VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('administrador', 'entrenador', 'cliente')),
+    fecha_registro DATE NOT NULL,
+    estado BOOLEAN DEFAULT TRUE
+);
+```
+
+### Tabla Planes
+```sql
+CREATE TABLE Planes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    duracion INT NOT NULL, -- Duración en meses
+    descripcion TEXT
+);
+```
+
+### Tabla Membresías
+```sql
+CREATE TABLE Membresias (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    plan_id INT NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    estado BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
+    FOREIGN KEY (plan_id) REFERENCES Planes(id)
+);
+```
+
+### Tabla Entrenadores
+```sql
+CREATE TABLE Entrenadores (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    especialidad VARCHAR(100),
+    calificacion DECIMAL(3, 2), -- Ejemplo: 4.5
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
+);
+```
+
+### Tabla Ejercicios
+```sql
+CREATE TABLE Ejercicios (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    musculo_objetivo VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    nivel_dificultad VARCHAR(20) NOT NULL CHECK (nivel_dificultad IN ('basico', 'intermedio', 'avanzado'))
+);
+```
+
+### Tabla Rutinas
+```sql
+CREATE TABLE Rutinas (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    entrenador_id INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    objetivo TEXT,
+    fecha_creacion DATE NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id),
+    FOREIGN KEY (entrenador_id) REFERENCES Entrenadores(id)
+);
+```
+
+### Tabla Rutinas_Ejercicios
+```sql
+CREATE TABLE Rutinas_Ejercicios (
+    id SERIAL PRIMARY KEY,
+    rutina_id INT NOT NULL,
+    ejercicio_id INT NOT NULL,
+    repeticiones INT NOT NULL,
+    series INT NOT NULL,
+    FOREIGN KEY (rutina_id) REFERENCES Rutinas(id),
+    FOREIGN KEY (ejercicio_id) REFERENCES Ejercicios(id)
+);
+```
+
+### Tabla Progreso
+```sql
+CREATE TABLE Progreso (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    peso DECIMAL(5, 2) NOT NULL, -- Ejemplo: 70.50 kg
+    porcentaje_grasa DECIMAL(5, 2), -- Ejemplo: 15.00 %
+    fecha DATE NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
+);
+```
+
+### Tabla Asistencias
+```sql
+CREATE TABLE Asistencias (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    fecha TIMESTAMP NOT NULL,
+    estado VARCHAR(20) NOT NULL CHECK (estado IN ('presente', 'ausente')),
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
+);
+```
+
+---
+
 ## Tecnologías utilizadas
 - **Node.js**
 - **Express**
@@ -114,6 +231,3 @@ Este proyecto es una API desarrollada con Node.js y Express que permite gestiona
 
 ## Contribuciones
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
-
----
-
