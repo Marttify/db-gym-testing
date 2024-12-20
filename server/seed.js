@@ -1,56 +1,76 @@
+import { sequelize } from './database.js';
+import { User, Asistencia, Ejercicio, Rutina, RutinaEjercicio, Progreso, Plan, Membresia, Entrenador } from './database.js';
 
+const seedData = async () => {
+  try {
+    await sequelize.sync({ force: true });
+    console.log('Base de datos sincronizada.');
 
+    // Usuarios
+    const users = await User.bulkCreate([
+      { nombre: 'Juan', apellido: 'Perez', email: 'juan@example.com', contraseña: '123456', rol: 'cliente', fecha_registro: new Date(), estado: true },
+      { nombre: 'Ana', apellido: 'Lopez', email: 'ana@example.com', contraseña: '123456', rol: 'entrenador', fecha_registro: new Date(), estado: true },
+      { nombre: 'Carlos', apellido: 'Gomez', email: 'carlos@example.com', contraseña: '123456', rol: 'administrador', fecha_registro: new Date(), estado: true },
+    ]);
+    console.log('Usuarios creados.');
 
-// copilot create 30 pets for my database, this is a development seed file
+    // Planes
+    const planes = await Plan.bulkCreate([
+      { nombre: 'Básico', precio: 20.00, duracion: 1, descripcion: 'Acceso básico al gimnasio.' },
+      { nombre: 'Premium', precio: 50.00, duracion: 3, descripcion: 'Acceso a todas las áreas y clases grupales.' },
+    ]);
+    console.log('Planes creados.');
 
-import { Pets } from './database.js';
+    // Membresías
+    const membresias = await Membresia.bulkCreate([
+      { usuario_id: users[0].id, plan_id: planes[0].id, fecha_inicio: new Date(), fecha_fin: new Date(new Date().setMonth(new Date().getMonth() + 1)), estado: true },
+      { usuario_id: users[1].id, plan_id: planes[1].id, fecha_inicio: new Date(), fecha_fin: new Date(new Date().setMonth(new Date().getMonth() + 3)), estado: true },
+    ]);
+    console.log('Membresías creadas.');
 
-const pets = [
-  { name: 'Firulais', breed_name: 'Pitbull', birthday: '2019-01-01' },
-  { name: 'Rex', breed_name: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_name: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_name: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_name: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_name: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Droopy', breed_name: 'Bulldog', birthday: '2019-01-01' },
-  { name: 'Spike', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Scooby', breed_name: 'Labrador', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
-  { name: 'Goofy', breed_name: 'Pastor Aleman', birthday: '2019-01-01' },
-  { name: 'Dino', breed_name: 'Chihuahua', birthday: '2019-01-01' },
-  { name: 'Odie', breed_name: 'Beagle', birthday: '2019-01-01' },
-  { name: 'Snoopy', breed_name: 'Pug', birthday: '2019-01-01' },
-  { name: 'Pluto', breed_name: 'Dalmata', birthday: '2019-01-01' },
-]
+    // Entrenadores
+    const entrenadores = await Entrenador.bulkCreate([
+      { usuario_id: users[1].id, especialidad: 'Fuerza', calificacion: 4.5 },
+    ]);
+    console.log('Entrenadores creados.');
 
-await Pets.bulkCreate(pets);
-console.log('Pets created');
+    // Ejercicios
+    const ejercicios = await Ejercicio.bulkCreate([
+      { nombre: 'Press de banca', musculo_objetivo: 'Pecho', descripcion: 'Ejercicio para fortalecer el pecho.', nivel_dificultad: 'intermedio' },
+      { nombre: 'Sentadilla', musculo_objetivo: 'Piernas', descripcion: 'Ejercicio para fortalecer las piernas.', nivel_dificultad: 'intermedio' },
+    ]);
+    console.log('Ejercicios creados.');
 
+    // Rutinas
+    const rutinas = await Rutina.bulkCreate([
+      { usuario_id: users[0].id, entrenador_id: entrenadores[0].id, nombre: 'Rutina Inicial', objetivo: 'Mejorar fuerza general.', fecha_creacion: new Date() },
+    ]);
+    console.log('Rutinas creadas.');
 
-import { User } from './database.js';
+    // Rutinas_Ejercicios
+    await RutinaEjercicio.bulkCreate([
+      { rutina_id: rutinas[0].id, ejercicio_id: ejercicios[0].id, repeticiones: 10, series: 3 },
+      { rutina_id: rutinas[0].id, ejercicio_id: ejercicios[1].id, repeticiones: 12, series: 3 },
+    ]);
+    console.log('Rutinas_Ejercicios creadas.');
 
-const users = [
-  { name: 'Alice Johnson', email: 'alice@example.com', birthday: '1990-03-15' },
-  { name: 'Bob Smith', email: 'bob@example.com', birthday: '1988-05-20' },
-  { name: 'Charlie Brown', email: 'charlie@example.com', birthday: '1995-11-10' },
-  { name: 'David Miller', email: 'david@example.com', birthday: '1987-09-25' },
-  { name: 'Emma Wilson', email: 'emma@example.com', birthday: '1993-02-18' },
-  { name: 'Frank Thomas', email: 'frank@example.com', birthday: '1984-07-08' },
-  { name: 'Grace Lee', email: 'grace@example.com', birthday: '1991-12-30' },
-  { name: 'Henry Wang', email: 'henry@example.com', birthday: '1986-06-05' },
-  { name: 'Ivy Chen', email: 'ivy@example.com', birthday: '1992-04-12' },
-  { name: 'Jackie Jones', email: 'jackie@example.com', birthday: '1989-08-22' },
-  { name: 'Kevin Davis', email: 'kevin@example.com', birthday: '1994-10-28' },
-  { name: 'Linda Martinez', email: 'linda@example.com', birthday: '1983-01-07' },
-  { name: 'Michael Brown', email: 'michael@example.com', birthday: '1996-07-19' },
-  { name: 'Nancy White', email: 'nancy@example.com', birthday: '1982-09-14' },
-  { name: 'Olivia Adams', email: 'olivia@example.com', birthday: '1997-03-04' },
-  { name: 'Peter Taylor', email: 'peter@example.com', birthday: '1981-11-26' },
-];
+    // Progreso
+    await Progreso.bulkCreate([
+      { usuario_id: users[0].id, peso: 70.5, porcentaje_grasa: 18.2, fecha: new Date() },
+    ]);
+    console.log('Progreso creado.');
 
-await User.bulkCreate(users);
+    // Asistencias
+    await Asistencia.bulkCreate([
+      { usuario_id: users[0].id, fecha: new Date(), estado: 'presente' },
+      { usuario_id: users[0].id, fecha: new Date(new Date().setDate(new Date().getDate() - 1)), estado: 'ausente' },
+    ]);
+    console.log('Asistencias creadas.');
+  } catch (error) {
+    console.error('Error al poblar la base de datos:', error.message);
+  } finally {
+    sequelize.close();
+  }
+};
 
-console.log('Users created');
+seedData();

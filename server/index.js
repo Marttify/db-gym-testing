@@ -1,136 +1,127 @@
 import express from 'express';
-import { Pets, User } from './database.js';
+import { Asistencia, Ejercicio, Rutina, RutinaEjercicio, Progreso, Plan, Membresia, Entrenador, User } from './database.js';
+import bodyParser from 'body-parser';
 
-import bodyParser from 'body-parser'
 const app = express();
-const port = process.env.PORT || 3000; // Set the port
+const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json()) // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+// Ruta principal
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.get('/get-users', async (req, res) => {
-  let allUsers = await User.findAll()
-  allUsers.map((users) => users.toJSON())
+// Obtener todos los usuarios
+app.get('/get-usuarios', async (req, res) => {
+  let allUsers = await User.findAll();
+  allUsers = allUsers.map((user) => user.toJSON());
   res.send(allUsers);
 });
 
-app.get('/get-user/:id', async (req, res) => {
+// Obtener un usuario por ID
+app.get('/get-usuarios/:id', async (req, res) => {
   const id = req.params.id;
   let user = await User.findByPk(id);
   if (!user) {
     res.status(404).send('Usuario no encontrado.');
     return;
   }
-  user = user.toJSON();
-  res.send(user);
+  res.send(user.toJSON());
 });
 
-app.get('/get-pets', async (req, res) => {
-  let allPets = await Pets.findAll()
-  allPets.map((pet) => pet.toJSON())
-  res.send(allPets);
-});
-
-app.get('/get-pets/:id', async (req, res) => {
-  const id = req.params.id;
-  let pets = await Pets.findByPk(id);
-  if (!pets) {
-    res.status(404).send('Usuario no encontrado.');
-    return;
+// Crear un usuario
+app.post('/create-usuario', async (req, res) => {
+  try {
+    const newUser = await User.create(req.body);
+    res.status(201).send(newUser.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  pets = pets.toJSON();
-  res.send(pets);
 });
 
+// Obtener todas las asistencias
+app.get('/get-asistencias', async (req, res) => {
+  const asistencias = await Asistencia.findAll();
+  res.send(asistencias.map((asistencia) => asistencia.toJSON()));
+});
 
-// Actualizar: 
-// /update-user/:id para actualizar el usuario, que se pueda actualizar el nombre, y que el nombre se pase por el body en un tipo de request PUT
-// /update-user/:id para actualizar el usuario, a travez del body se pueda actualizar el nombre, el email y la fecha de nacimiento
-
-app.put('/update-user/:id', async (req, res) => {
-  const id = req.params.id;
-  let user = await User.findByPk(id);
-  if (!user) {
-    res.status(404).send('Usuario no encontrado.');
-    return;
+// Crear una asistencia
+app.post('/create-asistencia', async (req, res) => {
+  try {
+    const newAsistencia = await Asistencia.create(req.body);
+    res.status(201).send(newAsistencia.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  await user.update({ name: "Ema" });
-  res.send('Usuario actualizado');
 });
 
-app.put('/update-pet/:id', async (req, res) => {
-  const id = req.params.id;
-  let pets = await Pets.findByPk(id);
-  if (!pets) {
-    res.status(404).send('Mascota no encontrado.');
-    return;
+// Obtener todos los ejercicios
+app.get('/get-ejercicios', async (req, res) => {
+  const ejercicios = await Ejercicio.findAll();
+  res.send(ejercicios.map((ejercicio) => ejercicio.toJSON()));
+});
+
+// Crear un ejercicio
+app.post('/create-ejercicio', async (req, res) => {
+  try {
+    const newEjercicio = await Ejercicio.create(req.body);
+    res.status(201).send(newEjercicio.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  // body
-  await pets.update({ name: "Akira" });
-  res.send('Mascota actualizada');
 });
 
-// Actualizar: 
-// /update-pet/:id para actualizar el mascota, que se pueda actualizar el nombre, y que el nombre se pase por el body en un tipo de request PUT
-// /update-pet/:id para actualizar el mascota, a travez del body se pueda actualizar el nombre, la raza y la fecha de nacimiento
-app.put('/update-user/:id', async (req, res) => {
-  const id = req.params.id;
-  let user = await User.findByPk(id);
-  if (!user) {
-    res.status(404).send('Usuario no encontrado.');
-    return;
+// Obtener todas las rutinas
+app.get('/get-rutinas', async (req, res) => {
+  const rutinas = await Rutina.findAll();
+  res.send(rutinas.map((rutina) => rutina.toJSON()));
+});
+
+// Crear una rutina
+app.post('/create-rutina', async (req, res) => {
+  try {
+    const newRutina = await Rutina.create(req.body);
+    res.status(201).send(newRutina.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  await user.update({ name: req.body.name });
-  res.send('Usuario actualizado');
 });
 
-app.put('/update-pet/:id', async (req, res) => {
-  const id = req.params.id;
-  let pets = await Pets.findByPk(id);
-  if (!pets) {
-    res.status(404).send('Mascota no encontrado.');
-    return;
+// Obtener todos los planes
+app.get('/get-planes', async (req, res) => {
+  const planes = await Plan.findAll();
+  res.send(planes.map((plan) => plan.toJSON()));
+});
+
+// Crear un plan
+app.post('/create-plan', async (req, res) => {
+  try {
+    const newPlan = await Plan.create(req.body);
+    res.status(201).send(newPlan.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  // body
-  await pets.update({ name: req.body.name });
-  res.send('Mascota actualizada');
 });
 
+// Obtener todas las membresías
+app.get('/get-membresias', async (req, res) => {
+  const membresias = await Membresia.findAll();
+  res.send(membresias.map((membresia) => membresia.toJSON()));
+});
 
-// Eliminar
-// /delete-user/:id para eliminar el usuario con el id que le estamos pasando
-// /delete-pet/:id para eliminar la mascota con el id que le estamos pasando
-app.delete('/delete-user/:id', async (req, res) => {
-  const id = req.params.id;
-  let user = await User.findByPk(id);
-  if (!user) {
-    res.status(404).send('Usuario no encontrado.');
-    return;
+// Crear una membresía
+app.post('/create-membresia', async (req, res) => {
+  try {
+    const newMembresia = await Membresia.create(req.body);
+    res.status(201).send(newMembresia.toJSON());
+  } catch (error) {
+    res.status(400).send({ error: error.message });
   }
-  await user.destroy();
-  res.send('Usuario eliminado');
 });
 
-app.delete('/delete-pet/:id', async (req, res) => {
-  const id = req.params.id;
-  let pets = await Pets.findByPk(id);
-  if (!pets) {
-    res.status(404).send('Usuario no encontrado.');
-    return;
-  }
-  await pets.destroy();
-  res.send('Mascota eliminada');
-});
-
-
-// Start the server
+// Iniciar el servidor
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
-
-
